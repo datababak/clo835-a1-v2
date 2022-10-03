@@ -19,8 +19,13 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      # Logs in the local Docker client to ECR using the AWS Academy credentials
+      Logs in the local Docker client to one or more Amazon ECR Private registries or an Amazon ECR Public registry.
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -29,30 +34,44 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_REGION: us-east-1        
+      # Builds two Ducker images and push them into Amazon ECR
       - name: Build Two Images and push them into Amazon ECR
         env:
-         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+         REPOSITORY: clo835-a1
+         IMAGE_TAG: ${{ github.sha }}
         run: |
-          cd clo835_fall2022_assignment1/  
+          cd clo835_a1/  
           # Building Docker image for mysql
-          docker build -f Dockerfile_mysql -t $ECR_REGISTRY/assgnmnt1-dev-mysql:v1.0 .
-          docker push $ECR_REGISTRY/assgnmnt1-dev-mysql:v1.0
+          docker build -f Dockerfile_mysql -t $REGISTRY/a1-db:v1.0 .
+          docker push $REGISTRY/a1-db:v1.0
           # Building docker for webapp
-          docker build -f Dockerfile -t $ECR_REGISTRY/assgnmnt1-dev-app:v1.0 .
-          docker push $ECR_REGISTRY/assgnmnt1-dev-app:v1.0
+          docker build -f Dockerfile -t $REGISTRY/a1-app:v1.0 .
+          docker push $REGISTRY/a1-app:v1.0
 
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
