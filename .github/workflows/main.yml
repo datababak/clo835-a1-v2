@@ -41,7 +41,6 @@ jobs:
          REPOSITORY: clo835-a1
          IMAGE_TAG: ${{ github.sha }}
         run: |
-          cd clo835-a1/  
           # Building Docker image for mysql
           docker build -f Dockerfile_mysql -t $REGISTRY/a1-db:v1.0 .
           docker push $REGISTRY/a1-db:v1.0
